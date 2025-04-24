@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Timer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: rgba(30, 30, 30, 0.9);
+            --panel-transparency: 0.2;
+            --button-transparency: 0.9;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            font-weight: normal;
+            color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            transition: all 0.5s;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        .pomodoro-mode { background-color: rgba(255, 255, 255, 0.15); }
+        .short-break-mode { background-color: rgba(255, 255, 255, 0.15); }
+        .long-break-mode { background-color: rgba(255, 255, 255, 0.15); }
+        
+        .timer-container {
+            text-align: center;
+            padding: 30px;
+            border-radius: 20px;
+            background-color: rgba(40, 40, 40, var(--panel-transparency));
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 540px;
+            backdrop-filter: blur(4px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 400px;
+        }
+        
+        .timer-display {
+            font-size: 7rem;
+            font-family: 'Raleway', sans-serif;
+            font-weight: normal;
+            margin: 20px 0;
+            letter-spacing: 2px;
+            color: white;
+            text-shadow: 1px 3px 6px rgba(0, 0, 0, 1);
+        }
+        
+        .mode-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .mode-btn {
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 1rem;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            backdrop-filter: blur(5px);
+            min-width: 80px;
+            box-shadow: 0 0px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .mode-btn:hover {
+            background-color: rgba(255, 255, 255, 0.0);
+            color: white;
+            font-weight: bold;
+        }
+
+        .mode-btn.active {
+            background-color: rgba(255, 255, 255, 0.8);
+            font-weight: bold;
+            color: black;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .controls button {
+            padding: 12px 24px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: bold;
+            min-width: 80px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: black;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .controls button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .pomodoro-count {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #aaa;
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 5px;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .pomodoro-icon {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            box-shadow: 0 5px 50px rgba(0, 0, 0, 1);
+        }
+
+        .pomodoro-space {
+            width: 3px;
+            display: inline-block;
+        }
+        
+        .settings-panel {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: rgba(50, 50, 50, var(--panel-transparency));
+            border-radius: 15px;
+            display: none;
+            width: 100%;
+            box-sizing: border-box;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        #settingsToggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        #settingsToggle:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .file-input-wrapper {
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            text-align: center;
+            transition: background-color 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .file-input-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .file-input-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-name {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        .error-message {
+            color: #f44336;
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .settings-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .settings-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+        
+        .settings-buttons button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .volume-control {
+        position: fixed;
+        
+        bottom: 27px;
+        right: 100px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: rgba(40, 40, 40, var(--panel-transparency));
+        padding: 10px 15px;
+        border-radius: 25px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        z-index: 1001;
+        }
+
+        .volume-control i {
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        .volume-slider {
+            width: 150px;
+            -webkit-appearance: none;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+        }
+
+        #closeSettingsBtn {
+            background: rgba(255, 255, 255, 0.1) !important;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        #spotifyButton:hover {
+            transform: scale(1.1);
+            background-color: rgba(40, 40, 40, 0.7) !important;
+        }
+
+        #closeSettingsBtn:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
+            transform: rotate(90deg);
+        }
+
+    </style>
+</head>
+<body class="pomodoro-mode">
+   
+    <div style="position:fixed; bottom:20px; left:10px; z-index:1000;">
+        <button id="spotifyButton" style="background-color:rgba(40, 40, 40, var(--panel-transparency)); border:none; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(12px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); transition:all 0.3s;">
+            <i class="fab fa-spotify" style="color:#ffffff; font-size:1.5rem;"></i>
+        </button>
+    </div>
+
+    <div class="volume-control">
+        <i class="fas fa-volume-up"></i>
+        <input type="range" min="0" max="1" step="0.1" value="0.5" class="volume-slider" id="volumeSlider">
+    </div>
+
+    <div class="timer-container">
+        <div class="mode-switcher">
+            <button class="mode-btn active" id="pomodoroBtn">Pomodoro</button>
+            <button class="mode-btn" id="shortBreakBtn">Short Break</button>
+            <button class="mode-btn" id="longBreakBtn">Long Break</button>
+        </div>
+
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        
+                <div class="controls">
+            <button id="startBtn">Start</button>
+            <button id="pauseBtn">Pause</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+        
+        <div class="pomodoro-count" id="pomodoroCount"></div>
+        
+        <div class="settings-panel" id="settingsPanel">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin-top: 0;">Change Background</h3>
+                <button id="closeSettingsBtn" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="backgroundForm">
+                <div class="file-input-wrapper">
+                    <label class="file-input-button">Choose Background Image</label>
+                    <input type="file" name="background" id="backgroundInput" accept="image/*">
+                </div>
+                <div class="file-name" id="fileName">No file selected</div>
+                <div class="error-message" id="errorMessage"></div>
+                
+                <div class="settings-buttons">
+                    <button type="submit" id="uploadBtn">Upload</button>
+                    <button type="button" id="removeBackgroundBtn">Remove</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <button id="settingsToggle" title="Settings"><i class="fas fa-cog"></i></button>
+
+    <!-- Elementy audio -->
+    <audio id="pomodoroStartSound" preload="auto">
+        <source src="/static/sounds/double_bell.wav" type="audio/wav">
+    </audio>
+    <audio id="shortBreakStartSound" preload="auto">
+        <source src="/static/sounds/double_bell.wav" type="audio/wav">
+    </audio>
+    <audio id="longBreakStartSound" preload="auto">
+        <source src="/static/sounds/end.wav" type="audio/wav">
+    </audio>
+    <audio id="timerStartSound" preload="auto">
+        <source src="/static/sounds/double_bell.wav" type="audio/wav">
+    </audio>
+
+    <script>
+        // Stałe
+        const WORK_DURATION = 25 * 60;
+        const SHORT_BREAK_DURATION = 5 * 60;
+        const LONG_BREAK_DURATION = 15 * 60;
+        const POMODOROS_PER_CYCLE = 4;
+
+        // Elementy DOM
+        const timerDisplay = document.getElementById('timerDisplay');
+        const pomodoroCount = document.getElementById('pomodoroCount');
+        const body = document.body;
+        const settingsPanel = document.getElementById('settingsPanel');
+        const backgroundForm = document.getElementById('backgroundForm');
+        const backgroundInput = document.getElementById('backgroundInput');
+        const fileName = document.getElementById('fileName');
+        const errorMessage = document.getElementById('errorMessage');
+        const pomodoroStartSound = document.getElementById('pomodoroStartSound');
+        const shortBreakStartSound = document.getElementById('shortBreakStartSound');
+        const longBreakStartSound = document.getElementById('longBreakStartSound');
+        const timerStartSound = document.getElementById('timerStartSound');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const removeBackgroundBtn = document.getElementById('removeBackgroundBtn');
+        const settingsToggle = document.getElementById('settingsToggle');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const pomodoroBtn = document.getElementById('pomodoroBtn');
+        const shortBreakBtn = document.getElementById('shortBreakBtn');
+        const longBreakBtn = document.getElementById('longBreakBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+        const spotifyButton = document.getElementById('spotifyButton');
+
+        // Zmienne stanu
+        let currentMode = 'pomodoro';
+        let lastUpdateTime = 0;
+        let animationFrameId;
+        let completedPomodoros = 0;
+        let lastMode = null;
+        let isFirstUpdate = true;
+        let volume = 0.1;
+
+        // Funkcje
+        function playSound(sound) {
+            sound.volume = volume;
+            sound.currentTime = 0;
+            sound.play().catch(e => console.error("Błąd odtwarzania dźwięku:", e));
+        }
+
+        function updateActiveButton(mode) {
+            pomodoroBtn.classList.remove('active');
+            shortBreakBtn.classList.remove('active');
+            longBreakBtn.classList.remove('active');
+
+            if (mode === 'pomodoro') {
+                pomodoroBtn.classList.add('active');
+            } else if (mode === 'short_break') {
+                shortBreakBtn.classList.add('active');
+            } else {
+                longBreakBtn.classList.add('active');
+            }
+        }
+
+        function updatePomodoroCount(count) {
+            pomodoroCount.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                if (i > 0 && i % POMODOROS_PER_CYCLE === 0) {
+                    const space = document.createElement('span');
+                    space.className = 'pomodoro-space';
+                    pomodoroCount.appendChild(space);
+                }
+                
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-check-circle pomodoro-icon';
+                pomodoroCount.appendChild(icon);
+            }
+        }
+
+        function updateDisplay(seconds, mode, count, bgImage) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            
+            // Sprawdzamy czy tryb się zmienił
+            if (mode !== currentMode || isFirstUpdate) {
+                // Najpierw odtwarzamy dźwięk dla STAREGO trybu (jeśli nie jest to pierwsza aktualizacja)
+                if (!isFirstUpdate && currentMode) {  // Dodany warunek currentMode
+                    if (currentMode === 'pomodoro') {
+                        playSound(pomodoroStartSound);
+                    } else if (currentMode === 'short_break') {
+                        playSound(shortBreakStartSound);
+                    } else if (currentMode === 'long_break') {
+                        playSound(longBreakStartSound);
+                    }
+                }
+
+                // Następnie aktualizujemy tryby (ważna kolejność!)
+                lastMode = currentMode;  // Zapisujemy stary tryb
+                currentMode = mode;      // Ustawiamy nowy tryb
+                
+                // Wizualna aktualizacja interfejsu
+                updateActiveButton(mode);
+                
+                body.className = '';
+                if (mode === 'pomodoro') {
+                    body.classList.add('pomodoro-mode');
+                } else if (mode === 'short_break') {
+                    body.classList.add('short-break-mode');
+                } else {
+                    body.classList.add('long-break-mode');
+                }
+
+                isFirstUpdate = false;
+            }
+            
+            updatePomodoroCount(count);
+            
+            if (bgImage) {
+                body.style.backgroundImage = `url('/static/uploads/${bgImage}')`;
+            } else {
+                body.style.backgroundImage = '';
+            }
+        }
+
+        async function fetchStatus() {
+            try {
+                const response = await fetch('/status');
+                if (!response.ok) throw new Error('Network error');
+                const data = await response.json();
+                completedPomodoros = data.pomodoro_count;
+                
+                // Ustawianie tła
+                if (data.background_image) {
+                    body.style.backgroundImage = `url('/static/uploads/${data.background_image}')`;
+                } else {
+                    // Domyślne tło
+                    body.style.backgroundImage = "url('/static/default_backgrounds/default_bg.jpg')";
+                }
+                
+                updateDisplay(data.remaining_time, data.current_mode, completedPomodoros, data.background_image);
+            } catch (error) {
+                console.error('Error fetching status:', error);
+                // Fallback na domyślne tło w przypadku błędu
+                body.style.backgroundImage = "url('/static/default_backgrounds/default_bg.jpg')";
+            }
+        }
+
+        function smoothUpdate() {
+            const now = Date.now();
+            if (now - lastUpdateTime >= 200) {  // Sprawdzaj częściej (co 200ms)
+                fetchStatus();
+                lastUpdateTime = now;
+            }
+            animationFrameId = requestAnimationFrame(smoothUpdate);
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/start');
+                if (response.ok) playSound(timerStartSound);
+            } catch (error) {
+                console.error('Start error:', error);
+            }
+        });
+        
+        pauseBtn.addEventListener('click', () => {
+            fetch('/pause').catch(error => console.error('Pause error:', error));
+        });
+        
+        resetBtn.addEventListener('click', () => {
+            fetch('/reset').catch(error => console.error('Reset error:', error));
+        });
+        
+        pomodoroBtn.addEventListener('click', async () => {
+            try {
+                const modeResponse = await fetch('/status');
+                const modeData = await modeResponse.json();
+                
+                if (modeData.current_mode === 'short_break' || modeData.current_mode === 'long_break') {
+                    // Najpierw przełącz tryb na pomodoro
+                    await fetch('/switch_to_pomodoro', { method: 'POST' });
+                    // Potem uruchom licznik
+                    const response = await fetch('/start', { method: 'POST' });
+                    if (response.ok) playSound(timerStartSound);
+                    // Na końcu odśwież UI
+                    fetchStatus();
+                }
+            } catch (error) {
+                console.error('Error starting Pomodoro:', error);
+            }
+        });
+        
+        shortBreakBtn.addEventListener('click', async () => {
+            await fetch('/switch_to_short_break', { method: 'POST' });
+            fetchStatus();
+        });
+        
+        longBreakBtn.addEventListener('click', async () => {
+            await fetch('/switch_to_long_break', { method: 'POST' });
+            fetchStatus();
+        });
+        
+        settingsToggle.addEventListener('click', () => {
+            settingsPanel.style.display = settingsPanel.style.display === 'block' ? 'none' : 'block';
+        });
+        
+        closeSettingsBtn.addEventListener('click', () => {
+            settingsPanel.style.display = 'none';
+        });
+
+        backgroundInput.addEventListener('change', (e) => {
+            fileName.textContent = e.target.files[0]?.name || 'No file selected';
+            errorMessage.textContent = '';
+        });
+        
+        backgroundForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const file = backgroundInput.files[0];
+            
+            if (!file) {
+                errorMessage.textContent = 'Please select a file first';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('background', file);
+
+            try {
+                uploadBtn.disabled = true;
+                uploadBtn.textContent = 'Uploading...';
+                
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Upload failed');
+                }
+
+                const data = await response.json();
+                fileName.textContent = `Current: ${data.filename}`;
+                errorMessage.textContent = '';
+                await fetchStatus();
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                console.error('Upload error:', error);
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = 'Upload';
+            }
+        });
+        
+        removeBackgroundBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/remove_background', {
+                    method: 'POST'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to remove background');
+                }
+                
+                fileName.textContent = 'No background';
+                backgroundInput.value = '';
+                await fetchStatus();
+            } catch (error) {
+                errorMessage.textContent = error.message;
+            }
+        });
+
+        // Dodaj event listener dla suwaka głośności
+        volumeSlider.addEventListener('input', (e) => {
+            volume = parseFloat(e.target.value);
+            // Możesz dodać zapisywanie głośności w localStorage
+            localStorage.setItem('pomodoroVolume', volume);
+        });
+
+        // Przy ładowaniu strony, wczytaj zapisaną głośność
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedVolume = localStorage.getItem('pomodoroVolume');
+            if (savedVolume) {
+                volume = parseFloat(savedVolume);
+                volumeSlider.value = volume;
+            }
+        });
+
+        spotifyButton.addEventListener('click', () => {
+            window.open('https://open.spotify.com/playlist/0Ec6DatLDguXsx4UDntZbw', '_blank');
+        });
+
+        // Inicjalizacja
+        smoothUpdate();
+        fetchStatus();
+        
+        window.addEventListener('beforeunload', () => {
+            cancelAnimationFrame(animationFrameId);
+        });
+    </script>
+</body>
+</html>
