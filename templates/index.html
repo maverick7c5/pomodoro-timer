@@ -2,17 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Focus Timer</title>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500&display=swap" rel="stylesheet">
-
     <style>
         :root {
             --bg-dark: rgba(30, 30, 30, 0.9);
@@ -21,7 +15,7 @@
         }
 
         body {
-            font-family: 'Montserrat', sans-serif; */
+            font-family: 'Montserrat', sans-serif;
             font-weight: 900;
             color: #f0f0f0;
             display: flex;
@@ -70,23 +64,32 @@
             gap: 10px;
             margin-bottom: 20px;
         }
+        
         .mode-btn {
             padding: 10px 15px;
             border-radius: 10px;
             border: none;
             cursor: pointer;
-            transition: all 0.3s;
             font-size: 1rem;
             background-color: rgba(255, 255, 255, 0.15);
             color: white;
             backdrop-filter: blur(5px);
             min-width: 80px;
             box-shadow: 0 0px 20px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s, transform 0.3s;
         }
 
-        .mode-btn:hover {
-            background-color: rgba(255, 255, 255, 0.0);
-            color: white;
+        /* Non-touch devices */
+        @media (hover: hover) {
+            .mode-btn:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        .mode-btn:active {
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: scale(0.95);
+            transition: background-color 0.1s, transform 0.1s;
         }
 
         .mode-btn.active {
@@ -107,18 +110,27 @@
             font-weight: 900;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
             font-size: 1rem;
             min-width: 80px;
             background-color: rgba(255, 255, 255, 0.8);
             color: black;
             backdrop-filter: blur(5px);
             box-shadow: 0 0px 20px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s, transform 0.3s;
         }
 
-        .controls button:hover {
-            background-color: rgba(255, 255, 255, 0.4);
-            transform: translateY(-2px);
+        /* Non-touch devices */
+        @media (hover: hover) {
+            .controls button:hover {
+                background-color: rgba(255, 255, 255, 0.4);
+                transform: translateY(-2px);
+            }
+        }
+
+        .controls button:active {
+            background-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(1px);
+            transition: background-color 0.1s, transform 0.1s;
         }
 
         .pomodoro-count {
@@ -168,18 +180,27 @@
             height: 50px;
             border-radius: 50%;
             cursor: pointer;
-            transition: all 0.3s;
             font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(5px);
+            transition: background-color 0.3s, transform 0.3s;
         }
 
-        #settingsToggle:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
+        /* Non-touch devices */
+        @media (hover: hover) {
+            #settingsToggle:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+                transform: scale(1.1);
+            }
+        }
+
+        #settingsToggle:active {
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: scale(0.95);
+            transition: background-color 0.1s, transform 0.1s;
         }
 
         .file-input-wrapper {
@@ -202,8 +223,16 @@
             backdrop-filter: blur(5px);
         }
 
-        .file-input-button:hover {
-            background-color: rgba(255, 255, 255, 0.3);
+        /* Non-touch devices */
+        @media (hover: hover) {
+            .file-input-button:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        .file-input-button:active {
+            background-color: rgba(255, 255, 255, 0.4);
+            transition: background-color 0.1s;
         }
 
         .file-input-wrapper input[type=file] {
@@ -241,30 +270,38 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s;
             background-color: rgba(255, 255, 255, 0.2);
             color: white;
             backdrop-filter: blur(5px);
+            transition: background-color 0.3s, transform 0.3s;
         }
 
-        .settings-buttons button:hover {
-            background-color: rgba(255, 255, 255, 0.3);
+        /* Non-touch devices */
+        @media (hover: hover) {
+            .settings-buttons button:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        .settings-buttons button:active {
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: scale(0.95);
+            transition: background-color 0.1s, transform 0.1s;
         }
 
         .volume-control {
-        position: fixed;
-
-        bottom: 27px;
-        right: 100px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background-color: rgba(40, 40, 40, var(--panel-transparency));
-        padding: 10px 15px;
-        border-radius: 25px;
-        backdrop-filter: blur(12px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        z-index: 1001;
+            position: fixed;
+            bottom: 27px;
+            right: 100px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(40, 40, 40, var(--panel-transparency));
+            padding: 10px 15px;
+            border-radius: 25px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
         }
 
         .volume-control i {
@@ -292,227 +329,211 @@
         }
 
         #closeSettingsBtn {
-            background: rgba(255, 255, 255, 0.1) !important;
+            background: rgba(255, 255, 255, 0.1);
             width: 30px;
             height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
-            backdrop-filter: blur(5px);
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
-        #spotifyButton:hover {
-            transform: scale(1.1);
-            background-color: rgba(40, 40, 40, 0.7) !important;
+        /* Non-touch devices */
+        @media (hover: hover) {
+            #closeSettingsBtn:hover {
+                background: rgba(255, 255, 255, 0.2);
+                transform: rotate(90deg);
+            }
         }
 
-        #closeSettingsBtn:hover {
-            background: rgba(255, 255, 255, 0.2) !important;
-            transform: rotate(90deg);
+        #closeSettingsBtn:active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(45deg);
+            transition: background-color 0.1s, transform 0.1s;
+        }
+
+        #spotifyButton {
+            background-color: rgba(40, 40, 40, var(--panel-transparency));
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        /* Non-touch devices */
+        @media (hover: hover) {
+            #spotifyButton:hover {
+                transform: scale(1.1);
+                background-color: rgba(40, 40, 40, 0.7);
+            }
+        }
+
+        #spotifyButton:active {
+            transform: scale(0.95);
+            background-color: rgba(40, 40, 40, 0.9);
+            transition: background-color 0.1s, transform 0.1s;
+        }
+
+        #spotifyButton i {
+            color: #ffffff;
+            font-size: 1.5rem;
         }
 
         .mode-btn, .controls button {
             font-family: 'Montserrat', sans-serif;
-            font-weight: 900; /* Półpogrubienie dla lepszej widoczności */
+            font-weight: 900;
         }
 
-         /* Base responsive adjustments */
-         @media (max-width: 768px) {
+        /* Base responsive adjustments */
+        @media (max-width: 768px) {
             :root {
                 --panel-transparency: 0.25; /* Slightly increase panel visibility on mobile */
             }
-            
+
             .timer-container {
                 width: 90%; /* Take most of the screen width */
                 max-width: 540px;
                 padding: 20px;
                 margin-bottom: 100px; /* Reduced margin on mobile */
             }
-            
+
             .timer-display {
                 font-size: 5rem; /* Smaller font size for timer */
             }
-            
+
             .mode-switcher {
                 flex-wrap: wrap; /* Allow wrapping if needed */
             }
-            
+
             .mode-btn {
                 padding: 8px 12px;
                 min-width: 75px;
             }
-            
+
             .controls button {
                 padding: 10px 20px;
             }
-            
+
             /* Adjust settings panel for mobile */
             .settings-panel {
                 padding: 15px;
             }
-            
-            /* Keep buttons touch-friendly but with proper animation */
-            .controls button:active {
-                transform: translateY(1px);
-                transition: transform 0.1s;
-            }
-            
-            .controls button:hover {
-                background-color: rgba(255, 255, 255, 0.4);
-                /* Remove the desktop hover transform to fix "stuck" button feeling */
-                transform: none;
-            }
-            
+
             /* Fix volume control position to be next to settings button */
             .volume-control {
-                position: fixed;
                 bottom: 20px; /* Same level as settings button */
                 right: 80px; /* Position to the left of settings button */
-                display: flex;
-                align-items: center;
-                width: auto;
                 padding: 8px 12px;
             }
-            
+
             .volume-slider {
                 width: 100px; /* Shorter slider on mobile */
             }
-            }
+        }
 
-            /* Extra small devices (phones) */
-            @media (max-width: 576px) {
+        /* Extra small devices (phones) */
+        @media (max-width: 576px) {
             body {
                 padding: 10px;
             }
-            
+
             .timer-container {
                 width: 95%;
                 padding: 15px;
                 margin-bottom: 80px;
             }
-            
+
             .timer-display {
                 font-size: 4rem;
                 margin: 15px 0;
             }
-            
+
             .mode-switcher {
                 gap: 5px;
                 margin-bottom: 15px;
             }
-            
+
             .mode-btn {
                 padding: 8px 10px;
                 min-width: 70px;
                 font-size: 0.9rem;
             }
-            
+
             .controls {
                 gap: 5px;
             }
-            
+
             .controls button {
                 padding: 10px 15px;
                 font-size: 0.9rem;
             }
-            
+
             /* Adjust volume slider position for very small screens but keep it next to settings */
             .volume-control {
-                bottom: 20px;
-                right: 80px;
                 padding: 6px 10px;
             }
-            
+
             .volume-slider {
                 width: 60px;
             }
-            
+
             #settingsToggle {
                 width: 45px;
                 height: 45px;
             }
-            
-            /* Fix tap/click interaction on small screens */
-            #settingsToggle:active {
-                transform: scale(1.05);
-                transition: transform 0.1s;
-            }
-            
-            #settingsToggle:hover {
-                background-color: rgba(255, 255, 255, 0.3);
-                /* Remove desktop hover animation */
-                transform: none;
-            }
-            }
+        }
 
-            /* Very small devices - adjust volume control layout */
-            @media (max-width: 400px) {
+        /* Very small devices - adjust volume control layout */
+        @media (max-width: 400px) {
             .volume-control {
                 width: auto;
                 padding: 6px 8px;
             }
-            
+
             .volume-control i {
                 font-size: 0.7rem;
             }
-            
+
             .volume-slider {
                 width: 50px;
             }
-            }
+        }
 
-            /* Portrait orientation adjustments */
-            @media (max-height: 700px) {
+        /* Portrait orientation adjustments */
+        @media (max-height: 700px) {
             .timer-container {
                 margin-bottom: 50px;
                 padding-top: 15px;
                 padding-bottom: 15px;
             }
-            
+
             .timer-display {
                 margin: 10px 0;
             }
-            
+
             .mode-switcher, .controls {
                 margin-bottom: 10px;
             }
-            }
-
-            /* Add touch-friendly active states for all interactive elements */
-            @media (max-width: 768px) {
-            .mode-btn:active {
-                background-color: rgba(255, 255, 255, 0.7);
-                color: black;
-                transition: all 0.1s;
-            }
-            
-            #spotifyButton:active {
-                transform: scale(1.05);
-                transition: transform 0.1s;
-            }
-            
-            #closeSettingsBtn:active {
-                background: rgba(255, 255, 255, 0.2) !important;
-                transform: rotate(45deg);
-                transition: all 0.1s;
-            }
-            
-            /* Override any hover effects that might cause "stuck" appearance */
-            .mode-btn:hover, .controls button:hover, #settingsToggle:hover, #spotifyButton:hover, #closeSettingsBtn:hover {
-                transition: none;
-            }
-            }  
-
-
+        }
     </style>
 </head>
 <body class="pomodoro-mode">
 
     <div style="position:fixed; bottom:20px; left:10px; z-index:1000;">
-        <button id="spotifyButton" style="background-color:rgba(40, 40, 40, var(--panel-transparency)); border:none; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(12px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); transition:all 0.3s;">
-            <i class="fab fa-spotify" style="color:#ffffff; font-size:1.5rem;"></i>
+        <button id="spotifyButton">
+            <i class="fab fa-spotify"></i>
         </button>
     </div>
 
@@ -530,7 +551,7 @@
 
         <div class="timer-display" id="timerDisplay">25:00</div>
 
-                <div class="controls">
+        <div class="controls">
             <button id="startBtn">Start</button>
             <button id="pauseBtn">Pause</button>
             <button id="resetBtn">Reset</button>
@@ -541,7 +562,7 @@
         <div class="settings-panel" id="settingsPanel">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="margin-top: 0;">Change Background</h3>
-                <button id="closeSettingsBtn" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;">
+                <button id="closeSettingsBtn">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -563,7 +584,7 @@
 
     <button id="settingsToggle" title="Settings"><i class="fas fa-cog"></i></button>
 
-    <!-- Elementy audio -->
+    <!-- Audio elements -->
     <audio id="pomodoroStartSound" preload="auto">
         <source src="/static/sounds/double_bell.wav" type="audio/wav">
     </audio>
@@ -578,13 +599,13 @@
     </audio>
 
     <script>
-        // Stałe
+        // Constants
         const WORK_DURATION = 25 * 60;
         const SHORT_BREAK_DURATION = 5 * 60;
         const LONG_BREAK_DURATION = 15 * 60;
         const POMODOROS_PER_CYCLE = 4;
 
-        // Elementy DOM
+        // DOM Elements
         const timerDisplay = document.getElementById('timerDisplay');
         const pomodoroCount = document.getElementById('pomodoroCount');
         const body = document.body;
@@ -610,7 +631,7 @@
         const closeSettingsBtn = document.getElementById('closeSettingsBtn');
         const spotifyButton = document.getElementById('spotifyButton');
 
-        // Zmienne stanu
+        // State variables
         let currentMode = 'pomodoro';
         let lastUpdateTime = 0;
         let animationFrameId;
@@ -619,11 +640,11 @@
         let isFirstUpdate = true;
         let volume = 0.1;
 
-        // Funkcje
+        // Functions
         function playSound(sound) {
             sound.volume = volume;
             sound.currentTime = 0;
-            sound.play().catch(e => console.error("Błąd odtwarzania dźwięku:", e));
+            sound.play().catch(e => console.error("Sound playback error:", e));
         }
 
         function updateActiveButton(mode) {
@@ -661,10 +682,10 @@
             const secs = seconds % 60;
             timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 
-            // Sprawdzamy czy tryb się zmienił
+            // Check if mode has changed
             if (mode !== currentMode || isFirstUpdate) {
-                // Najpierw odtwarzamy dźwięk dla STAREGO trybu (jeśli nie jest to pierwsza aktualizacja)
-                if (!isFirstUpdate && currentMode) {  // Dodany warunek currentMode
+                // Play sound for OLD mode (if not first update)
+                if (!isFirstUpdate && currentMode) {
                     if (currentMode === 'pomodoro') {
                         playSound(pomodoroStartSound);
                     } else if (currentMode === 'short_break') {
@@ -674,11 +695,11 @@
                     }
                 }
 
-                // Następnie aktualizujemy tryby (ważna kolejność!)
-                lastMode = currentMode;  // Zapisujemy stary tryb
-                currentMode = mode;      // Ustawiamy nowy tryb
+                // Update modes (order matters!)
+                lastMode = currentMode;  // Save old mode
+                currentMode = mode;      // Set new mode
 
-                // Wizualna aktualizacja interfejsu
+                // Visual UI update
                 updateActiveButton(mode);
 
                 body.className = '';
@@ -709,25 +730,25 @@
                 const data = await response.json();
                 completedPomodoros = data.pomodoro_count;
 
-                // Ustawianie tła
+                // Set background
                 if (data.background_image) {
                     body.style.backgroundImage = `url('/static/uploads/${data.background_image}')`;
                 } else {
-                    // Domyślne tło
+                    // Default background
                     body.style.backgroundImage = "url('/static/default_backgrounds/default_bg.jpg')";
                 }
 
                 updateDisplay(data.remaining_time, data.current_mode, completedPomodoros, data.background_image);
             } catch (error) {
                 console.error('Error fetching status:', error);
-                // Fallback na domyślne tło w przypadku błędu
+                // Fallback to default background on error
                 body.style.backgroundImage = "url('/static/default_backgrounds/default_bg.jpg')";
             }
         }
 
         function smoothUpdate() {
             const now = Date.now();
-            if (now - lastUpdateTime >= 200) {  // Sprawdzaj częściej (co 200ms)
+            if (now - lastUpdateTime >= 200) {  // Check more frequently (every 200ms)
                 fetchStatus();
                 lastUpdateTime = now;
             }
@@ -758,12 +779,12 @@
                 const modeData = await modeResponse.json();
 
                 if (modeData.current_mode === 'short_break' || modeData.current_mode === 'long_break') {
-                    // Najpierw przełącz tryb na pomodoro
+                    // First switch to pomodoro mode
                     await fetch('/switch_to_pomodoro', { method: 'POST' });
-                    // Potem uruchom licznik
+                    // Then start the timer
                     const response = await fetch('/start', { method: 'POST' });
                     if (response.ok) playSound(timerStartSound);
-                    // Na końcu odśwież UI
+                    // Finally refresh UI
                     fetchStatus();
                 }
             } catch (error) {
@@ -851,14 +872,14 @@
             }
         });
 
-        // Dodaj event listener dla suwaka głośności
+        // Volume slider event listener
         volumeSlider.addEventListener('input', (e) => {
             volume = parseFloat(e.target.value);
-            // Możesz dodać zapisywanie głośności w localStorage
+            // Save volume to localStorage
             localStorage.setItem('pomodoroVolume', volume);
         });
 
-        // Przy ładowaniu strony, wczytaj zapisaną głośność
+        // Load saved volume on page load
         window.addEventListener('DOMContentLoaded', () => {
             const savedVolume = localStorage.getItem('pomodoroVolume');
             if (savedVolume) {
