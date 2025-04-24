@@ -173,5 +173,3 @@ if __name__ == '__main__':
         # Tutaj możesz dodać logikę tworzenia domyślnej tapety
         # lub skopiować ją z zasobów aplikacji
         print(f"Warning: Default background not found at {DEFAULT_BG_PATH}")
-    
-    app.run(debug=True, threaded=True)
