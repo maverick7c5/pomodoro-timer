@@ -164,4 +164,10 @@ def remove_background():
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     os.makedirs('static/sounds', exist_ok=True)
-    app.run(debug=True, threaded=True)
+    os.makedirs('static/default_backgrounds', exist_ok=True)
+    
+    # Sprawdź czy domyślna tapeta istnieje
+    if not os.path.exists(DEFAULT_BG_PATH):
+        # Tutaj możesz dodać logikę tworzenia domyślnej tapety
+        # lub skopiować ją z zasobów aplikacji
+        print(f"Warning: Default background not found at {DEFAULT_BG_PATH}")
