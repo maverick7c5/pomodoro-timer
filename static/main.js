@@ -66,17 +66,33 @@ function updateActiveButton(mode) {
   if (mode === 'long_break') longBreakBtn.classList.add('active');
 }
 
+
+// Function to update the pomodoro count display
 function updatePomodoroCount(count) {
   pomodoroCount.innerHTML = '';
-  for (let i = 0; i < count; i++) {
-    if (i > 0 && i % POMODOROS_PER_CYCLE === 0) {
-      const space = document.createElement('span');
-      space.className = 'pomodoro-space';
-      pomodoroCount.appendChild(space);
+  
+  // Create cycle containers to organize sessions
+  const totalCycles = Math.ceil(count / POMODOROS_PER_CYCLE);
+  
+  for (let cycle = 0; cycle < totalCycles; cycle++) {
+    // Create a container for each cycle
+    const cycleContainer = document.createElement('div');
+    cycleContainer.className = 'pomodoro-cycle';
+    
+    // Calculate sessions to display in this cycle
+    const sessionsInCycle = Math.min(
+      POMODOROS_PER_CYCLE,
+      count - (cycle * POMODOROS_PER_CYCLE)
+    );
+    
+    // Add session icons to this cycle
+    for (let i = 0; i < sessionsInCycle; i++) {
+      const icon = document.createElement('i');
+      icon.className = 'fas fa-check-circle pomodoro-icon';
+      cycleContainer.appendChild(icon);
     }
-    const icon = document.createElement('i');
-    icon.className = 'fas fa-check-circle pomodoro-icon';
-    pomodoroCount.appendChild(icon);
+    
+    pomodoroCount.appendChild(cycleContainer);
   }
 }
 
