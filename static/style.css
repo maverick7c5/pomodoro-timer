@@ -122,29 +122,59 @@
     transition: background-color 0.1s, transform 0.1s;
   }
   
-  /* === POMODORO COUNT === */
-  .pomodoro-count {
+
+/* === POMODORO COUNT === */
+.pomodoro-count {
     margin-top: 25px;
     font-size: 1.1rem;
     color: #aaa;
     display: flex;
-    justify-content: flex-start;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 10px;
     width: 100%;
-    padding: 0 20px;
+    padding: 0 10px;
     box-sizing: border-box;
   }
   
-  .pomodoro-icon {
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 0.85rem;
-    box-shadow: 0 5px 50px rgba(0, 0, 0, 1);
+  /* Container for each cycle of 4 pomodoros */
+  .pomodoro-cycle {
+    display: flex;
+    gap: 5px;
+    margin-right: 10px;
+    border-radius: 12px;
+    padding: 1px 8px;
   }
   
-  .pomodoro-space {
-    width: 3px;
-    display: inline-block;
+  .pomodoro-icon {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+  }
+  
+  /* Media queries for responsive design */
+  @media (max-width: 768px) {
+    .pomodoro-count {
+      justify-content: center;
+    }
+    
+    .pomodoro-cycle {
+      margin-bottom: 5px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .pomodoro-count {
+      gap: 8px;
+      padding: 0 5px;
+    }
+    
+    .pomodoro-cycle {
+      padding: 4px 6px;
+      margin-right: 5px;
+    }
+    
+    .pomodoro-icon {
+      font-size: 0.8rem;
+    }
   }
   
   /* === SETTINGS PANEL === */
@@ -345,3 +375,5 @@
     .timer-display { margin: 10px 0; }
     .mode-switcher, .controls { margin-bottom: 10px; }
   }
+  
+  
