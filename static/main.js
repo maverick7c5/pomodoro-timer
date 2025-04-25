@@ -23,6 +23,8 @@ const pomodoroBtn = document.getElementById('pomodoroBtn');
 const shortBreakBtn = document.getElementById('shortBreakBtn');
 const longBreakBtn = document.getElementById('longBreakBtn');
 const volumeSlider = document.getElementById('volumeSlider');
+const volumeControl = document.getElementById('volumeControl');
+const volumeIcon = document.getElementById('volumeIcon');
 const closeSettingsBtn = document.getElementById('closeSettingsBtn');
 const spotifyButton = document.getElementById('spotifyButton');
 
@@ -47,6 +49,16 @@ function playSound(sound) {
   sound.play().catch(console.error);
 }
 
+function playSoundRepeated(sound, times = 5, delay = 800) {
+  for (let i = 0; i < times; i++) {
+    setTimeout(() => {
+      sound.currentTime = 0;
+      sound.volume = volume;
+      sound.play().catch(console.error);
+    }, i * delay);
+  }
+}
+
 function updateActiveButton(mode) {
   [pomodoroBtn, shortBreakBtn, longBreakBtn].forEach(btn => btn.classList.remove('active'));
   if (mode === 'pomodoro') pomodoroBtn.classList.add('active');
@@ -65,16 +77,6 @@ function updatePomodoroCount(count) {
     const icon = document.createElement('i');
     icon.className = 'fas fa-check-circle pomodoro-icon';
     pomodoroCount.appendChild(icon);
-  }
-}
-
-function playSoundRepeated(sound, times = 5, delay = 800) {
-  for (let i = 0; i < times; i++) {
-    setTimeout(() => {
-      sound.currentTime = 0;
-      sound.volume = volume;
-      sound.play().catch(console.error);
-    }, i * delay);
   }
 }
 
@@ -125,6 +127,11 @@ function smoothUpdate() {
 
 // === Event Listeners ===
 startBtn.onclick = async () => {
+  try {
+    timerStartSound.volume = volume;
+    await timerStartSound.play();
+    timerStartSound.pause();
+  } catch {}
   const res = await fetch('/start');
   if (res.ok) playSound(timerStartSound);
 };
@@ -198,6 +205,10 @@ removeBackgroundBtn.onclick = async () => {
 volumeSlider.oninput = (e) => {
   volume = parseFloat(e.target.value);
   localStorage.setItem('pomodoroVolume', volume);
+};
+
+volumeIcon.onclick = () => {
+  volumeControl.classList.toggle('expanded');
 };
 
 // === Initialization ===
