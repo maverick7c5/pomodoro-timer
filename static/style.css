@@ -163,7 +163,7 @@
   
   @media (max-width: 576px) {
     .pomodoro-count {
-      gap: 8px;
+      gap: 2px;
       padding: 0 5px;
     }
     
