@@ -13,9 +13,9 @@ DEFAULT_BACKGROUND = "su-san-lee-E_eWwM29wfU-unsplash.jpg"
 app.background_image = DEFAULT_BACKGROUND
 
 # Domyślne ustawienia timera
-WORK_DURATION = 25 * 1
-SHORT_BREAK_DURATION = 5 * 1
-LONG_BREAK_DURATION = 15 * 1
+WORK_DURATION = 25 * 60
+SHORT_BREAK_DURATION = 5 * 60
+LONG_BREAK_DURATION = 15 * 60
 pomodoro_count = 0
 is_running = False
 remaining_time = WORK_DURATION
