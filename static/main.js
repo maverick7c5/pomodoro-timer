@@ -40,25 +40,63 @@ let animationFrameId;
 let completedPomodoros = 0;
 let lastMode = null;
 let isFirstUpdate = true;
-let volume = 0.1;
+let volume = 0.5;
 
-// === Functions ===
-function playSound(sound) {
-  sound.volume = volume;
-  sound.currentTime = 0;
-  sound.play().catch(console.error);
+// === Volume Control ===
+function updateAllSoundsVolume() {
+  const sounds = [
+    pomodoroStartSound,
+    shortBreakStartSound,
+    longBreakStartSound,
+    timerStartSound
+  ];
+  
+  sounds.forEach(sound => {
+    if (sound) sound.volume = volume;
+  });
 }
 
-function playSoundRepeated(sound, times = 5, delay = 800) {
-  for (let i = 0; i < times; i++) {
-    setTimeout(() => {
-      sound.currentTime = 0;
-      sound.volume = volume;
-      sound.play().catch(console.error);
-    }, i * delay);
+function updateVolumeIcon() {
+  if (volume === 0) {
+    volumeIcon.className = 'fas fa-volume-mute';
+  } else if (volume < 0.5) {
+    volumeIcon.className = 'fas fa-volume-down';
+  } else {
+    volumeIcon.className = 'fas fa-volume-up';
   }
 }
 
+function initVolume() {
+  const savedVolume = localStorage.getItem('pomodoroVolume');
+  if (savedVolume !== null) {
+    volume = parseFloat(savedVolume);
+    volumeSlider.value = volume;
+  }
+  updateAllSoundsVolume();
+  updateVolumeIcon();
+}
+
+// === Sound Functions ===
+function playSound(sound) {
+  if (!sound) return;
+  
+  sound.volume = volume;
+  sound.currentTime = 0;
+  
+  sound.pause();
+  
+  setTimeout(() => {
+    sound.play().catch(e => {
+      console.log("Playback prevented, trying fallback");
+      sound.volume = 0;
+      sound.play().then(() => {
+        sound.volume = volume;
+      }).catch(e => console.log("Fallback failed"));
+    });
+  }, 50);
+}
+
+// === Timer Functions ===
 function updateActiveButton(mode) {
   [pomodoroBtn, shortBreakBtn, longBreakBtn].forEach(btn => btn.classList.remove('active'));
   if (mode === 'pomodoro') pomodoroBtn.classList.add('active');
@@ -66,26 +104,20 @@ function updateActiveButton(mode) {
   if (mode === 'long_break') longBreakBtn.classList.add('active');
 }
 
-
-// Function to update the pomodoro count display
 function updatePomodoroCount(count) {
   pomodoroCount.innerHTML = '';
   
-  // Create cycle containers to organize sessions
   const totalCycles = Math.ceil(count / POMODOROS_PER_CYCLE);
   
   for (let cycle = 0; cycle < totalCycles; cycle++) {
-    // Create a container for each cycle
     const cycleContainer = document.createElement('div');
     cycleContainer.className = 'pomodoro-cycle';
     
-    // Calculate sessions to display in this cycle
     const sessionsInCycle = Math.min(
       POMODOROS_PER_CYCLE,
       count - (cycle * POMODOROS_PER_CYCLE)
     );
     
-    // Add session icons to this cycle
     for (let i = 0; i < sessionsInCycle; i++) {
       const icon = document.createElement('i');
       icon.className = 'fas fa-check-circle pomodoro-icon';
@@ -142,7 +174,7 @@ function smoothUpdate() {
 }
 
 // === Event Listeners ===
-startBtn.onclick = async () => {
+startBtn.addEventListener('click', async () => {
   try {
     timerStartSound.volume = volume;
     await timerStartSound.play();
@@ -150,37 +182,39 @@ startBtn.onclick = async () => {
   } catch {}
   const res = await fetch('/start');
   if (res.ok) playSound(timerStartSound);
-};
+});
 
-pauseBtn.onclick = () => fetch('/pause').catch(console.error);
-resetBtn.onclick = () => fetch('/reset').catch(console.error);
+pauseBtn.addEventListener('click', () => fetch('/pause').catch(console.error));
+resetBtn.addEventListener('click', () => fetch('/reset').catch(console.error));
 
-pomodoroBtn.onclick = async () => {
+pomodoroBtn.addEventListener('click', async () => {
   const status = await fetch('/status').then(res => res.json());
   if (['short_break', 'long_break'].includes(status.current_mode)) {
     await fetch('/switch_to_pomodoro', { method: 'POST' });
     await fetch('/start', { method: 'POST' });
     fetchStatus();
   }
-};
+});
 
-shortBreakBtn.onclick = () => fetch('/switch_to_short_break', { method: 'POST' }).then(fetchStatus);
-longBreakBtn.onclick = () => fetch('/switch_to_long_break', { method: 'POST' }).then(fetchStatus);
+shortBreakBtn.addEventListener('click', () => 
+  fetch('/switch_to_short_break', { method: 'POST' }).then(fetchStatus));
+longBreakBtn.addEventListener('click', () => 
+  fetch('/switch_to_long_break', { method: 'POST' }).then(fetchStatus));
 
-settingsToggle.onclick = () => {
+settingsToggle.addEventListener('click', () => {
   settingsPanel.style.display = settingsPanel.style.display === 'block' ? 'none' : 'block';
-};
+});
 
-closeSettingsBtn.onclick = () => {
+closeSettingsBtn.addEventListener('click', () => {
   settingsPanel.style.display = 'none';
-};
+});
 
-backgroundInput.onchange = (e) => {
+backgroundInput.addEventListener('change', (e) => {
   fileName.textContent = e.target.files[0]?.name || 'No file selected';
   errorMessage.textContent = '';
-};
+});
 
-backgroundForm.onsubmit = async (e) => {
+backgroundForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const file = backgroundInput.files[0];
   if (!file) return errorMessage.textContent = 'Please select a file first';
@@ -205,9 +239,9 @@ backgroundForm.onsubmit = async (e) => {
     uploadBtn.disabled = false;
     uploadBtn.textContent = 'Upload';
   }
-};
+});
 
-removeBackgroundBtn.onclick = async () => {
+removeBackgroundBtn.addEventListener('click', async () => {
   try {
     await fetch('/remove_background', { method: 'POST' });
     fileName.textContent = 'No background';
@@ -216,24 +250,29 @@ removeBackgroundBtn.onclick = async () => {
   } catch (error) {
     errorMessage.textContent = error.message;
   }
-};
+});
 
-volumeSlider.oninput = (e) => {
+volumeSlider.addEventListener('input', (e) => {
   volume = parseFloat(e.target.value);
   localStorage.setItem('pomodoroVolume', volume);
-};
+  updateAllSoundsVolume();
+  updateVolumeIcon();
+});
 
-volumeIcon.onclick = () => {
-  volumeControl.classList.toggle('expanded');
-};
+volumeSlider.addEventListener('change', (e) => {
+  volume = parseFloat(e.target.value);
+  localStorage.setItem('pomodoroVolume', volume);
+  updateAllSoundsVolume();
+  updateVolumeIcon();
+});
+
+spotifyButton.addEventListener('click', () => {
+  window.open('https://open.spotify.com/playlist/0Ec6DatLDguXsx4UDntZbw', '_blank');
+});
 
 // === Initialization ===
 window.addEventListener('DOMContentLoaded', () => {
-  const savedVolume = localStorage.getItem('pomodoroVolume');
-  if (savedVolume) {
-    volume = parseFloat(savedVolume);
-    volumeSlider.value = volume;
-  }
+  initVolume();
   smoothUpdate();
   fetchStatus();
 });
@@ -241,7 +280,3 @@ window.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('beforeunload', () => {
   cancelAnimationFrame(animationFrameId);
 });
-
-spotifyButton.onclick = () => {
-  window.open('https://open.spotify.com/playlist/0Ec6DatLDguXsx4UDntZbw', '_blank');
-};
