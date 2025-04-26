@@ -49,14 +49,13 @@
 
   <button id="spotifyButton" title="Spotify"><i class="fab fa-spotify"></i></button>
 
-<div class="volume-control" id="volumeControl">
-  <i class="fas fa-volume-up" id="volumeIcon" style="cursor: pointer;"></i>
-  <input type="range" min="0" max="1" step="0.1" value="0.5" class="volume-slider" id="volumeSlider">
-</div>
+  <div class="volume-control" id="volumeControl">
+    <i class="fas fa-volume-up" id="volumeIcon"></i>
+    <input type="range" min="0" max="1" step="0.1" value="0.5" class="volume-slider" id="volumeSlider">
+  </div>
 
   <button id="settingsToggle" title="Settings"><i class="fas fa-cog"></i></button>
 
-  <!-- Audio elements -->
   <audio id="pomodoroStartSound" preload="auto">
     <source src="/static/sounds/double_bell.wav" type="audio/wav">
   </audio>
