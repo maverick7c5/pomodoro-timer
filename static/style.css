@@ -140,10 +140,10 @@
   .pomodoro-cycle {
     display: flex;
     gap: 5px;
-    margin-right: 2%;
-    margin-left: 2%;
+    margin-right: 1%;
+    margin-left: 1%;
     border-radius: 12px;
-    padding: 5px 8px;
+    padding: 1px 8px;
   }
   
   .pomodoro-icon {
@@ -151,7 +151,7 @@
     font-size: 0.9rem;
   }
   
-  /* Media queries for responsive design */
+  /* Media queries for responsive design
   @media (max-width: 768px) {
     .pomodoro-count {
       justify-content: center;
@@ -176,7 +176,7 @@
     .pomodoro-icon {
       font-size: 0.8rem;
     }
-  }
+  } */
   
   /* === SETTINGS PANEL === */
   .settings-panel {
@@ -376,5 +376,3 @@
     .timer-display { margin: 10px 0; }
     .mode-switcher, .controls { margin-bottom: 10px; }
   }
-  
-  
