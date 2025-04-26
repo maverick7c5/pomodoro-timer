@@ -122,7 +122,6 @@
     transition: background-color 0.1s, transform 0.1s;
   }
   
-
 /* === POMODORO COUNT === */
 .pomodoro-count {
     margin-top: 25px;
@@ -130,7 +129,6 @@
     color: #aaa;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
     width: 100%;
     padding: 0 10px;
     box-sizing: border-box;
@@ -140,9 +138,10 @@
   .pomodoro-cycle {
     display: flex;
     gap: 5px;
-    margin-right: 10px;
+    margin-right: 2%;
+    margin-left: 2%;
     border-radius: 12px;
-    padding: 1px 8px;
+    padding: 5px 8px;
   }
   
   .pomodoro-icon {
@@ -284,6 +283,50 @@
     transform: scale(0.95);
   }
   
+  /* === VOLUME CONTROL === */
+  .volume-control {
+    position: fixed;
+    bottom: 25px;
+    right: 80px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(40, 40, 40, 0.7);
+    padding: 10px 15px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    transition: all 0.3s ease;
+  }
+  
+  .volume-slider {
+    width: 80px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    outline: none;
+    -webkit-appearance: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  .volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+  }
+  
+  .volume-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+  }
+  
   /* === FLOATING BUTTONS === */
   #settingsToggle,
   #spotifyButton {
@@ -315,48 +358,14 @@
     background-color: rgba(40, 40, 40, 0.3);
   }
   
-  /* === VOLUME CONTROL === */
-  .volume-control {
-    position: fixed;
-    bottom: 20px;
-    right: 100px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background-color: rgba(40, 40, 40, 0.3);
-    padding: 10px;
-    border-radius: 25px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    z-index: 1001;
-    height: 30px;
-    transition: width 0.3s ease;
-    overflow: hidden;
-  }
-  
-  .volume-slider {
-    width: 100px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 5px;
-    outline: none;
-    -webkit-appearance: none;
-    display: none;
-    transition: opacity 0.3s ease;
-  }
-  
-  .volume-control.expanded .volume-slider {
-    display: block;
-  }
-  
   /* === MEDIA QUERIES === */
   @media (max-width: 768px) {
     :root { --panel-transparency: 0.25; }
     .timer-container { width: 90%; max-width: 540px; padding: 20px; margin-bottom: 100px; }
     .timer-display { font-size: 5rem; }
     .controls button { padding: 10px 20px; }
-    .volume-control { right: 80px; padding: 8px 12px; height: 35px; }
-    .volume-slider { width: 100px; }
+    .volume-control { right: 70px; padding: 8px 12px; }
+    .volume-slider { width: 70px; }
   }
   
   @media (max-width: 576px) {
@@ -365,6 +374,7 @@
     .timer-display { font-size: 4rem; margin: 15px 0; }
     .mode-btn { padding: 8px 10px; min-width: 70px; font-size: 0.9rem; }
     .controls button { padding: 10px 15px; font-size: 0.9rem; }
+    .volume-control { right: 60px; padding: 6px 10px; }
     .volume-slider { width: 60px; }
     #settingsToggle, #spotifyButton { width: 45px; height: 45px; }
     #spotifyButton { left: 10px; }
@@ -375,5 +385,3 @@
     .timer-display { margin: 10px 0; }
     .mode-switcher, .controls { margin-bottom: 10px; }
   }
-  
-  
